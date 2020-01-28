@@ -16,7 +16,7 @@ public class EvilHangman {
             numGuesses = Integer.parseInt(args[2]);
         }
         EvilHangmanGame newGame = new EvilHangmanGame();
-        //newGame.setNumGuesses(numGuesses);
+        newGame.setNumGuesses(numGuesses);
         newGame.startGame(fileName, wordLength);
     }
 }

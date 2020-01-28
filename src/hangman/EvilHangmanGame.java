@@ -2,175 +2,301 @@ package hangman;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.rmi.activation.ActivationGroup_Stub;
 import java.util.*;
-
-/* TO ASK
-* Throwing exceptions
-* how to set numGuesses number
-* Best way to make word families*/
 
 public class EvilHangmanGame implements IEvilHangmanGame{
     Set<String> dictWords;
     SortedSet<Character> guessedLetters;
     private int lengthWord;
     private int numGuesses;
-    private ArrayList<Character> correctLetter;
+    StringBuilder correctLetter;
     private int userGuesses;
+    private TreeMap<String,Set<String>> wordFams;
 
     public EvilHangmanGame () {
         dictWords = new HashSet<String>();
         guessedLetters = new TreeSet<Character>();
+        correctLetter = new StringBuilder();
     }
-
-    /*You have 10 guesses left
-    Used letters:
-    Word: -----
-    Enter guess: a
-    Sorry, there are no a's
-    * */
 
     public void resetGame() {
         dictWords = new HashSet<String>();
         guessedLetters = new TreeSet<Character>();
-        numGuesses = 0;
+        correctLetter = new StringBuilder();
+        userGuesses = 0;
     }
 
     @Override
     public void startGame(File dictionary, int wordLength) throws IOException, EmptyDictionaryException {
-        //need to have a clear game method
         resetGame();
-        Scanner scanner = new Scanner(dictionary);
-        readFile(scanner, wordLength);
+        dictWords = ReadFile.readFile(dictionary, wordLength);
+        if(dictWords.size() == 0) {
+            throw new EmptyDictionaryException();
+        }
+
         lengthWord = wordLength;
         userGuesses = 0;
-        //Set<String> correctletters = new TreeSet<>();
-        correctLetter = new ArrayList<>();
         for(int i = 0; i < wordLength; ++i) {
-            correctLetter.add('-');
+            correctLetter.append('-');
         }
 
         while(userGuesses < numGuesses) {
             printStats();
             char userChar = 'a';
+            Set<String> getSet = new HashSet<>();
 
             System.out.print("Enter guess: ");
             Scanner in = new Scanner(System.in);
             userChar = in.next().charAt(0);
-            System.out.print("\n");
-            System.out.print("Sorry, there are no " + userChar +"'s");
+            try {
+                getSet = makeGuess(userChar);
+            } catch (GuessAlreadyMadeException e) {
+                e.printStackTrace();
+            }
+            countGuess(getSet, userChar);
+
+            System.out.print("\n\n");
             ++userGuesses;
+        }
+        if(correctLetter.indexOf("-") >= 0) {
+            System.out.print("You lose!\n");
+            System.out.print("The word was: " + dictWords.iterator().next());
+        } else {
+            System.out.print("You win!\n");
+        }
+
+    }
+
+    public void countGuess(Set<String> wordSet, char guess) {
+        String wordString = "";
+        int countChar = 0;
+        wordString = wordSet.iterator().next();
+        for(int i = 0; i < wordString.length(); ++i) {
+            if (wordString.charAt(i) == guess) {
+                ++countChar;
+            }
+        }
+        if (countChar == 0) {
+            System.out.print("Sorry, there are no " + guess +"'s");
+        } else {
+            System.out.print("Yes, there is " + countChar + " " + guess);
         }
     }
 
     public void printStats() {
-        System.out.print("You have " + (numGuesses - userGuesses) + "left\n");
+        System.out.print("You have " + (numGuesses - userGuesses) + " guesses left\n");
         System.out.print("Used letters:" );
+        StringBuilder sb = new StringBuilder();
         for(char chars: guessedLetters) {
-            System.out.print(chars + ", ");
+            sb.append(chars);
+            sb.append(" ");
         }
-        System.out.print("\n");
-        System.out.print("Word: ");
-        for(char chars: correctLetter) {
-            System.out.print(chars + " ");
+        if(sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
         }
-        //probably need to do another loop storing a string with correctLetters
-        System.out.print("\n");
-    }
 
-    public void readFile(Scanner dictScanner, int wordLength) throws EmptyDictionaryException {
-        while(dictScanner.hasNext()) {
-            String newWord = dictScanner.next();
-            if(newWord.length() == wordLength) {
-                dictWords.add(newWord);
-            }
-        }
-        if(dictWords.size() == 0) {
-            //nothing was added, need to call exception
-        }
+        System.out.print(sb.toString());
+        System.out.print("\n");
+        System.out.print("Word: " + correctLetter.toString());
+        System.out.print("\n");
     }
 
     @Override
     public Set<String> makeGuess(char guess) throws GuessAlreadyMadeException {
-        ArrayList<Set<String>> wordFamilies = new ArrayList<Set<String>>();
-        ArrayList<ArrayList<Integer>> letterGroups = new ArrayList<>();
-        if(!guessedLetters.add(guess))  {
-            //nothing was added, need to call exception
+        wordFams = new TreeMap<>();
+        Set<String> newList;
+        String baseWord = "";
+
+        for(int i = 0; i < lengthWord; ++i) {
+            baseWord += '-';
         }
-        //going to return the largest set of strings
-        //need to make word groups
-        ArrayList<Integer> wordLocs;
+
+        if (!Character.isLetter(guess)) {
+            //not a valid character
+            return null;
+        }
+        guess = Character.toLowerCase(guess);
+        StringBuilder charLocs;
         for (String next : dictWords) {
-            wordLocs = new ArrayList<>();
-            for(int i = 0; i < next.length(); ++i) {
+            charLocs = new StringBuilder(baseWord);
+            for (int i = 0; i < next.length(); ++i) {
                 if (next.charAt(i) == guess) {
-                    // add positions where characters match dictionary
-                    wordLocs.add(i);
-                }
-            }
-            // what happens if wordLocs is empty? Might need to add another if
-            if(letterGroups.add(wordLocs)) {
-                Set<String> newSet = new HashSet<>();
-                newSet.add(next);
-                //Found a new word Location
-                wordFamilies.add(newSet);
-            }
-            else {
-                //need to find the correct word family and add it to that set.
-                for(int j = 0; j < letterGroups.size(); ++j) {
-                    if(letterGroups.get(j) == wordLocs) {
-                        //Found, add it to that group
-                        wordFamilies.get(j).add(next);
-                    }
+                    charLocs.setCharAt(i, guess);
                 }
             }
 
+            if(!wordFams.containsKey(charLocs.toString())) {
+                newList = new HashSet<>();
+                newList.add(next);
+                wordFams.put(charLocs.toString(), newList);
+            } else {
+                //does have word group, need to add it to that set
+                newList = wordFams.get(charLocs.toString());
+                newList.add(next);
+                wordFams.put(charLocs.toString(), newList);
+            }
         }
 
-        return findSet(wordFamilies, guess);
+        if(!guessedLetters.add(guess))  {
+            throw new GuessAlreadyMadeException();
+        }
+        //++userGuesses;
+        dictWords = findSet(wordFams, guess);
+        return dictWords;
     }
 
-    public Set<String> findSet(ArrayList<Set<String>> allSets, char guess) {
-        if(allSets.size() == 1) {
-            return allSets.get(0);
+    public void replaceDashes(String string, char guess) {
+        for(int i = 0; i < string.length(); ++i) {
+            if(string.charAt(i) == guess) {
+                correctLetter.setCharAt(i, guess);
+            }
         }
-        // Now we have to compare sizes
+    }
+
+    public Set<String> findSet(TreeMap<String,Set<String>> wordFams, char guess) {
+        if(wordFams.size() == 1) {
+            String first = wordFams.firstKey();
+            replaceDashes(first, guess);
+            return wordFams.get(first);
+        }
+
         int largestSet = -1;
-        ArrayList<Set<String>> matchingCountSets =  null;
-        for(Set<String> set : allSets) {
-            if (set.size() > largestSet) {
-                matchingCountSets = new ArrayList<>();
-                matchingCountSets.add(set);
+        Set<String> matchingCountSets =  null;
+        for(Map.Entry<String,Set<String>> entry : wordFams.entrySet()) {
+            if (entry.getValue().size() > largestSet) {
+                matchingCountSets =  new HashSet<>();
+                matchingCountSets.add(entry.getKey());
+                largestSet = entry.getValue().size();
             }
-            if (set.size() == largestSet) {
-                matchingCountSets.add(set);
+            if (entry.getValue().size() == largestSet) {
+                matchingCountSets.add(entry.getKey());
             }
         }
-        if(allSets.size() == 1) {
-            return matchingCountSets.get(0);
-        } else {
-            // There are more than one sets with the same count
-            boolean foundChar = false;
-            for(Set<String> set: matchingCountSets) {
-                String findGuess = (String) set.toArray()[0];
-                for(int i = 0; i < findGuess.length(); ++i) {
-                    if (findGuess.charAt(i) == guess) {
-                        foundChar = true;
+
+        assert matchingCountSets != null;
+        if(matchingCountSets.size() == 1) {
+            String onlyVal = matchingCountSets.iterator().next();
+            replaceDashes(onlyVal, guess);
+            return wordFams.get(onlyVal);
+        }
+        boolean foundChar = false;
+        for(String string : matchingCountSets) {
+            if(string.indexOf(guess) != -1) {
+                foundChar = true;
+            }
+            if(!foundChar) {
+                replaceDashes(string, guess);
+                return wordFams.get(string);
+            }
+        }
+        //END OF RULE 1
+
+        Set<String> matchingLetterCount =  null;
+        int letterCount;
+        int lowestCount = 45; // The length of the longest word in the english language
+
+        for(String string: matchingCountSets) {
+            letterCount = 0;
+            for(int i = 0; i < string.length(); ++i) {
+                if(string.charAt(i) == guess) {
+                    ++letterCount;
+                }
+            }
+            if (letterCount < lowestCount) {
+                //matchingLetterCount = new ArrayList<>();
+                matchingLetterCount =  new HashSet<>();
+                matchingLetterCount.add(string);
+                lowestCount = letterCount;
+            }
+            if (letterCount == lowestCount) {
+                matchingLetterCount.add(string);
+            }
+        }
+        if(matchingLetterCount.size() == 1) {
+            String onlyVal = matchingLetterCount.iterator().next();
+            replaceDashes(onlyVal, guess);
+            return wordFams.get(onlyVal);
+        }
+        //END OF RULE 2
+
+        //If this still has not resolved the issue, choose the one with the rightmost guessed letter
+        String onlyVal = rightMost(matchingLetterCount, guess);
+        replaceDashes(onlyVal, guess);
+        return wordFams.get(onlyVal);
+    }
+
+    public String rightMost(Set<String> stringSet, char guess) {
+        Set<String> matchingRights = null;
+        Set<Integer> markedInts = new HashSet<>();
+        int rightMost = -1;
+        for(String string: stringSet) {
+            for(int i = string.length() - 1; i >= 0; --i) {
+                if (string.charAt(i) == guess) {
+                    if (i > rightMost) {
+                        matchingRights = new HashSet<>();
+                        rightMost = i;
+                        matchingRights.add(string);
+                    }
+                    if (i == rightMost) {
+                        markedInts = new HashSet<>();
+                        markedInts.add(i);
+                        matchingRights.add(string);
                     }
                 }
-                if(foundChar == false) {
-                    return set;
+            }
+        }
+        if(matchingRights.size() > 1) {
+            return rightMost(matchingRights, guess, markedInts);
+            //need to make a recursive call
+        }
+        //replaceDashes(onlyVal, guess);
+        return matchingRights.iterator().next();
+    }
+
+    public String rightMost(Set<String> stringSet, char guess, Set<Integer> markedInts) {
+        Set<String> matchingRights = null;
+        //Set<Integer> markedInts;
+        int rightMost = -1;
+        for(String string: stringSet) {
+             for(int i = string.length() - 1; i >= 0; --i) {
+                if (string.charAt(i) == guess) {
+                    boolean beenMarked = false;
+                    for(int checkInt: markedInts) {
+                        if(i == checkInt) {
+                            beenMarked = true;
+                        }
+                    }
+                    if(beenMarked) {
+                        continue;
+                    }
+                    if (i > rightMost) {
+                        matchingRights = new HashSet<>();
+                        rightMost = i;
+                        matchingRights.add(string);
+                    }
+                    if (i == rightMost) {
+                        markedInts = new HashSet<>();
+                        markedInts.add(i);
+                        matchingRights.add(string);
+                    }
                 }
             }
-            //Found none that didn't contain character, moving to rule 2
-            //Where i'm going to log off for today
-
-            return  matchingCountSets.get(0);
         }
+        if(matchingRights.size() > 1) {
+            return rightMost(matchingRights, guess, markedInts);
+            //need to make a recursive call
+        }
+        //replaceDashes(onlyVal, guess);
+        return matchingRights.iterator().next();
     }
 
     @Override
     public SortedSet<Character> getGuessedLetters() {
         return guessedLetters;
+    }
+
+    public void setNumGuesses(int numGuesses) {
+        this.numGuesses = numGuesses;
     }
 }
