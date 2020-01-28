@@ -175,49 +175,59 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1245" y="233" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1580096056417" />
-    <state x="862" y="242" key="FileChooserDialogImpl" timestamp="1580098387486">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="690" y="192" key="FileChooserDialogImpl" timestamp="1580196812838">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="690" y="192" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1580196812838" />
     <state x="862" y="242" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1580098387486" />
-    <state width="1877" height="207" key="GridCell.Tab.0.bottom" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom" timestamp="1580235467575">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1580235467575" />
     <state width="1877" height="207" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.0.center" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.0.center" timestamp="1580235467573">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1580235467573" />
     <state width="1877" height="207" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.0.left" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.0.left" timestamp="1580235467573">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1580235467573" />
     <state width="1877" height="207" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.0.right" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.0.right" timestamp="1580235467573">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1580235467573" />
     <state width="1877" height="207" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.1.bottom" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1580235467576">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1580235467576" />
     <state width="1877" height="207" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.1.center" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1580235467575">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1580235467575" />
     <state width="1877" height="207" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.1.left" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1580235467575">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1580235467575" />
     <state width="1877" height="207" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
-    <state width="1877" height="207" key="GridCell.Tab.1.right" timestamp="1580196222295">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1580235467576">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1580235467576" />
     <state width="1877" height="207" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580196222295" />
     <state x="562" y="62" key="SettingsEditor" timestamp="1580023237949">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="562" y="62" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1580023237949" />
-    <state x="1147" y="348" key="com.intellij.ide.util.TipDialog" timestamp="1580168397307">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="918" y="276" key="com.intellij.ide.util.TipDialog" timestamp="1580234225091">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="918" y="276" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1580234225091" />
     <state x="1147" y="348" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580168397307" />
     <state x="1104" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1580195823043">
       <screen x="0" y="0" width="1920" height="1040" />

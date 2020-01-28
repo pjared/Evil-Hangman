@@ -9,9 +9,7 @@ public class EvilHangmanGame implements IEvilHangmanGame{
     Set<String> dictWords;
     SortedSet<Character> guessedLetters;
     private int lengthWord;
-    private int numGuesses;
     StringBuilder correctLetter;
-    private int userGuesses;
     private TreeMap<String,Set<String>> wordFams;
 
     public EvilHangmanGame () {
@@ -24,7 +22,6 @@ public class EvilHangmanGame implements IEvilHangmanGame{
         dictWords = new HashSet<String>();
         guessedLetters = new TreeSet<Character>();
         correctLetter = new StringBuilder();
-        userGuesses = 0;
     }
 
     @Override
@@ -36,34 +33,8 @@ public class EvilHangmanGame implements IEvilHangmanGame{
         }
 
         lengthWord = wordLength;
-        userGuesses = 0;
         for(int i = 0; i < wordLength; ++i) {
             correctLetter.append('-');
-        }
-
-        while(userGuesses < numGuesses) {
-            printStats();
-            char userChar = 'a';
-            Set<String> getSet = new HashSet<>();
-
-            System.out.print("Enter guess: ");
-            Scanner in = new Scanner(System.in);
-            userChar = in.next().charAt(0);
-            try {
-                getSet = makeGuess(userChar);
-            } catch (GuessAlreadyMadeException e) {
-                e.printStackTrace();
-            }
-            countGuess(getSet, userChar);
-
-            System.out.print("\n\n");
-            ++userGuesses;
-        }
-        if(correctLetter.indexOf("-") >= 0) {
-            System.out.print("You lose!\n");
-            System.out.print("The word was: " + dictWords.iterator().next());
-        } else {
-            System.out.print("You win!\n");
         }
 
     }
@@ -85,7 +56,7 @@ public class EvilHangmanGame implements IEvilHangmanGame{
     }
 
     public void printStats() {
-        System.out.print("You have " + (numGuesses - userGuesses) + " guesses left\n");
+
         System.out.print("Used letters:" );
         StringBuilder sb = new StringBuilder();
         for(char chars: guessedLetters) {
@@ -113,8 +84,7 @@ public class EvilHangmanGame implements IEvilHangmanGame{
         }
 
         if (!Character.isLetter(guess)) {
-            //not a valid character
-            return null;
+            throw new GuessAlreadyMadeException();
         }
         guess = Character.toLowerCase(guess);
         StringBuilder charLocs;
@@ -294,9 +264,5 @@ public class EvilHangmanGame implements IEvilHangmanGame{
     @Override
     public SortedSet<Character> getGuessedLetters() {
         return guessedLetters;
-    }
-
-    public void setNumGuesses(int numGuesses) {
-        this.numGuesses = numGuesses;
     }
 }
